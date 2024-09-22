@@ -17,6 +17,27 @@ router.get('/all', (req, res) => {
     res.json(rows);
   });
 });
+// Obtener todas las farmacias con sustancias controladas
+router.get('/farmacias-con-sustancias', (req, res) => {
+  db.query(`
+    SELECT f.id, f.nombre, f.latitud, f.longitud
+    FROM farmacia f
+    JOIN farmacia_sustancias fs ON f.id = fs.farmacia_id
+    WHERE f.status = 1;
+  `, (error, rows) => {
+    if (error) {
+      console.error('Error fetching farmacias con sustancias:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'No se encontraron farmacias con sustancias controladas' });
+    }
+    
+    res.json(rows);
+  });
+});
+
 // Ruta para obtener horas de entrada y salida para una farmacia específica
 router.get('/:id/horas', (req, res) => {
   const { id } = req.params;

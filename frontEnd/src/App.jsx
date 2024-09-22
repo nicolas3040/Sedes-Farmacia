@@ -9,7 +9,7 @@ function App() {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    fetch('http://localhost:8081/farmacia/all')
+    fetch('http://localhost:3000/farmacia/all')
       .then((response) => response.json())
       .then((data) => {
         console.log('Farmacias:', data); // Verifica los datos obtenidos
