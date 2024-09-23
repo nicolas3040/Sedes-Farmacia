@@ -1,7 +1,12 @@
-import { createRoot } from 'react-dom/client';
-import App from './App.jsx';
-import './index.css';
+  import { StrictMode } from 'react'
+  import { createRoot } from 'react-dom/client'
+  import App from './App.jsx'
+  import Navegacion  from './Filtro.jsx'
+  import './index.css'
 
-createRoot(document.getElementById('root')).render(
-  <App />
-);
+  createRoot(document.getElementById('root')).render(
+    <StrictMode>
+      <Navegacion /> {/* Usa Navegacion aquí */}
+    </StrictMode>,
+  );
+  

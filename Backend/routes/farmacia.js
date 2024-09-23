@@ -17,6 +17,52 @@ router.get('/all', (req, res) => {
     res.json(rows);
   });
 });
+// Obtener todas las farmacias con sustancias controladas
+router.get('/farmacias-con-sustancias', (req, res) => {
+  db.query(`
+    SELECT f.id, f.nombre, f.latitud, f.longitud
+    FROM farmacia f
+    JOIN farmacia_sustancias fs ON f.id = fs.farmacia_id
+    WHERE f.status = 1;
+  `, (error, rows) => {
+    if (error) {
+      console.error('Error fetching farmacias con sustancias:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'No se encontraron farmacias con sustancias controladas' });
+    }
+    
+    res.json(rows);
+  });
+});
+
+// Ruta para obtener horas de entrada y salida para una farmacia específica
+router.get('/:id/horas', (req, res) => {
+  const { id } = req.params;
+
+  // Consulta SQL ajustada
+  db.query(`
+    SELECT h.id, h.nombre, h.hora_entrada, h.hora_salida
+    FROM Horas h
+    INNER JOIN Farmacia_Horas fh ON h.id = fh.hora_id
+    WHERE fh.farmacia_id = ? AND h.status = 1;
+  `, [id], (error, rows) => {
+      if (error) {
+          console.error('Error al obtener las horas:', error);
+          return res.status(500).json({ error: 'Internal server error' });
+      }
+
+      if (rows.length === 0) {
+          return res.status(404).json({ error: 'No se encontraron horas para esta farmacia' });
+      }
+
+      res.json(rows);
+  });
+});
+
+
 
 // Obtener una farmacia por ID
 router.get('/:id', (req, res) => {
