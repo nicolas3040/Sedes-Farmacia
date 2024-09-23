@@ -8,7 +8,7 @@ function Filtros() {
 
   // Función para obtener farmacias activas
   const fetchFarmaciasActivas = () => {
-    fetch('http://localhost:3000/farmacia/all')
+    fetch('http://localhost:8082/farmacia/all')
       .then((response) => response.json())
       .then((data) => {
         console.log('Farmacias activas:', data);
@@ -19,7 +19,7 @@ function Filtros() {
 
   // Función para obtener horas de entrada y salida para una farmacia específica
   const fetchHoras = (id) => {
-    fetch(`http://localhost:3000/farmacia/${id}/horas`)
+    fetch(`http://localhost:8082/farmacia/${id}/horas`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -35,7 +35,7 @@ function Filtros() {
 
   // Función para obtener farmacias con sustancias controladas
 const fetchFarmaciasConSustancias = () => {
-    fetch(`http://localhost:3000/farmacia/farmacias-con-sustancias`)
+    fetch(`http://localhost:8082/farmacia/farmacias-con-sustancias`)
       .then((response) => response.json())
       .then((data) => {
         console.log('Farmacias con sustancias controladas:', data);

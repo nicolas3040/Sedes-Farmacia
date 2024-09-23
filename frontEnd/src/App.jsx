@@ -9,7 +9,7 @@ function App() {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    fetch('http://localhost:3000/farmacia/all')
+    fetch('http://localhost:8082/farmacia/all')
       .then((response) => response.json())
       .then((data) => {
         console.log('Farmacias:', data); // Verifica los datos obtenidos
@@ -21,7 +21,7 @@ function App() {
   // Función para obtener horas de entrada y salida para una farmacia específica
   const fetchHoras = (id) => {
     console.log('Fetching horas for farmacia ID:', id); // Log para verificar ID
-    fetch(`http://localhost:8081/farmacia/${id}/horas`)
+    fetch(`http://localhost:8082/farmacia/${id}/horas`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
