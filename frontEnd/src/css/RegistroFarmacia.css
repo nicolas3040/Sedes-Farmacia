@@ -1,0 +1,162 @@
+.container1 {
+    padding: 16px;
+    background-color: #FBFBFB;
+    padding: 50px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .title1 {
+    font-size: 26px;
+    color: #FBFBFB;
+    text-align: center;
+    margin-bottom: 15px;
+    background-color: #393939;
+    border-top-right-radius: 60px;
+    border-top-left-radius: 60px;
+    border-bottom-right-radius: 100px;
+    border-bottom-left-radius: 100px;
+    padding: 75px;
+  }
+  
+  .subtitle1 {
+    font-size: 17px;
+    font-weight: bold;
+    color: #555;
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 35px;
+  }
+  
+  
+  .label1 {
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 8px;
+    margin-top: 10px;
+  }
+  .label21 {
+    text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 20px;
+    margin-top: 10px;
+  }
+  
+  
+  .input1 {
+    width: 100%;
+  padding: 10px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  text-align: center;
+  background-color: #fff;
+  color: #808080;
+  font-size: 14px;
+  box-shadow: 0px 2px 3.84px rgba(0, 0, 0, 0.25);
+}
+
+  
+  .picker1 {
+    width: 100%;
+  padding: 10px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  text-align: center;
+  background-color: #fff;
+  color: #808080;
+  font-size: 14px;
+  box-shadow: 0px 2px 3.84px rgba(0, 0, 0, 0.25);
+}
+
+  
+.checkboxContainer11 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-bottom: 20px;
+
+}
+
+.checkboxContainer1 {
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  margin-bottom: 17px;
+}
+  
+.checkboxWrapper1 {
+  background-color: transparent;
+  color: black;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 20px;
+  margin-left: 15px;
+  margin-bottom: 10px;
+}
+  
+  .checkboxLabel1 {
+  margin-left: 8px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #555;
+}
+.mapImage1 {
+  width: 100%;
+  height: 200px;
+  margin-bottom: 20px;
+}
+  
+.buttonContainer1 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+.Btn11 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  border: 2px solid #393939;
+  border-radius: 7px;
+  width: 30%;
+  height: 150%;
+  margin-right: -150px;
+}
+.Btn1Text1 {
+  color: #393939;
+}
+
+.Btn21 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  border: 2px solid #F44C7F;
+  border-radius: 7px;
+  width: 30%;
+  height: 150%;
+}
+
+.Btn2Text1 {
+  color: #F44C7F;
+}
+
+.Btn31 {
+  background-color: #F44C7F;
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Btn3Text1 {
+  color: #fff;
+}

@@ -1,6 +1,9 @@
-import { useState, useEffect } from 'react';
-
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Home from './Home/Home'; 
 import './App.css';
+
+
 
 function App() {
   const [farmacias, setFarmacias] = useState([]);
@@ -9,7 +12,7 @@ function App() {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    fetch('http://localhost:8081/farmacia/all')
+    fetch('http://localhost:8082/farmacia/all')
       .then((response) => response.json())
       .then((data) => {
         console.log('Farmacias:', data); // Verifica los datos obtenidos
@@ -21,7 +24,7 @@ function App() {
   // Función para obtener horas de entrada y salida para una farmacia específica
   const fetchHoras = (id) => {
     console.log('Fetching horas for farmacia ID:', id); // Log para verificar ID
-    fetch(`http://localhost:8081/farmacia/${id}/horas`)
+    fetch(`http://localhost:8082/farmacia/${id}/horas`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -41,62 +44,14 @@ function App() {
   };
 
   return (
-    <>
-      
-      <h1>Farmacias</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {farmacias.map((farmacia) => (
-            <tr key={farmacia.id}>
-              <td>{farmacia.id}</td>
-              <td>{farmacia.nombre}</td>
-              <td>
-                <button onClick={() => handleFarmaciaClick(farmacia.id)}>
-                  Ver Horas
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <Router>
+     
 
-      {selectedFarmacia && (
-        <>
-          <h2>Horas de Farmacia ID: {selectedFarmacia}</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Hora Entrada</th>
-                <th>Hora Salida</th>
-              </tr>
-            </thead>
-            <tbody>
-              {horas.length > 0 ? (
-                horas.map((hora) => (
-                  <tr key={hora.id}>
-                    <td>{hora.id}</td>
-                    <td>{hora.hora_entrada}</td>
-                    <td>{hora.hora_salida}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="3">No se encontraron horas.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </>
-      )}
-    </>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        {/* Aquí puedes añadir más rutas para otras vistas si lo necesitas */}
+      </Routes>
+    </Router>
   );
 }
 
