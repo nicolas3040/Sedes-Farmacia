@@ -1,12 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './css/MenuAdmin.css'; // Importa el archivo CSS
+import './MenuAdmin.css'; // Importa el archivo CSS
 
 export default function MenuAdmin() {
   const navigate = useNavigate(); // Inicializa useNavigate
 
   const handleMenu = () => {
-    navigate('/'); // Redirige a la ruta de MenuAdmin
+    navigate('/Login'); // Redirige a la ruta de MenuAdmin
   };
   const handleRegistro = () => {
     navigate('/registro-farmacia'); // Redirige a la ruta de registro
@@ -61,8 +61,8 @@ export default function MenuAdmin() {
         <span className="buttonText2">Registrar Nueva Farmacia</span>
       </button>
 
-      <button className="logoutButton2" onClick={handleMenu}>
-        <span className="logoutButtonText2">Cerrar Sesión</span>
+      <button className="homeButton" onClick={handleMenu}>
+        <span className="homeButtonText">Cerrar Sesión</span>
       </button>
     </div>
   );

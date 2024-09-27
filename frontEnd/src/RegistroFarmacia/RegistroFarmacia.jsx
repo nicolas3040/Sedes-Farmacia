@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './css/RegistroFarmacia.css'; // Importamos el archivo de estilos
+import './RegistroFarmacia.css'; // Importamos el archivo de estilos
 
 const RegistroFarmacia = () => {
   const navigate = useNavigate(); // Inicializa useNavigate
@@ -143,8 +143,8 @@ const RegistroFarmacia = () => {
       />
 
       {/* Imagen del mapa */}
-      <button className="btn31">
-        Confirmar Ubicación
+      <button className="bottomButton2">
+      <span className="buttonText2">Confirmar Ubicacion</span>
       </button>
       
       {/* Datos Propietario */}
@@ -239,7 +239,7 @@ const RegistroFarmacia = () => {
       {/* Sustancias Controladas */}
       <div className="checkboxContainer11">
         <div className="checkboxContainer1">
-          <label className="label1">Sustancias Controladas:</label>
+          <label className="label1">Sustancias Controladas</label>
           <div className="checkboxWrapper1">
             <input
               type="checkbox"
@@ -280,7 +280,7 @@ const RegistroFarmacia = () => {
         
         {/* Oncológicos */}
         <div className="checkboxContainer1">
-          <label className="label1">Oncológicos:</label>
+          <label className="label1">Oncológicos</label>
           <div className="checkboxWrapper1">
           <input
             type="checkbox"
@@ -295,11 +295,11 @@ const RegistroFarmacia = () => {
       
       {/* Botones para navegar */}
       <div className="buttonContainer1">
-        <button className="Btn11" onClick={handleMenu}>
-          <span className="Btn1Text1">Cancelar</span>
+        <button className="homeButton" onClick={handleMenu}>
+          <span className="homeButtonText">Cancelar</span>
         </button>
-        <button className="Btn21">
-          <span className="Btn2Text1">Siguiente</span>
+        <button className="loginButton">
+          <span className="loginButtonText">Siguiente</span>
         </button>
       </div>
     </div>
