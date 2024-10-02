@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react'; // Asegúrate de importar useState y useEffect
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Home from './Home/Home'; 
-import Login from './Login'; // Asegúrate de que la ruta a tu componente de Login es correcta
-import MenuAdmin from './Menu_Admin/MenuAdmin'; // Importa tu componente MenuAdmin
-import Turno from './Turno/Turno'; 
-
 import './App.css';
+
+
 
 function App() {
   const [farmacias, setFarmacias] = useState([]);
@@ -47,30 +45,10 @@ function App() {
 
   return (
     <Router>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Inicio</Link>
-          </li>
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
-          <li>
-            <Link to="/admin">Admin</Link> 
-          </li>
-          <li>
-            <Link to="/turno">Turno</Link> 
-          </li>
-        </ul>
-      </nav>
+     
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/admin" element={<MenuAdmin />} /> 
-        <Route path="/turno" element={<Turno />} /> 
-
-
         {/* Aquí puedes añadir más rutas para otras vistas si lo necesitas */}
       </Routes>
     </Router>

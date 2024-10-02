@@ -9,24 +9,40 @@ const defaultIcon = new L.Icon({
     shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
 });
 
-
-const MapView = () => {
+const MapView = ({ filter }) => {
     const [farmacias, setFarmacias] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:8082/farmacia/all')
-            .then(response => response.json())
-            .then(data => {
-                console.log('Datos recibidos:', data); // Log para verificar datos
+        const fetchFarmacias = async () => {
+            try {
+                let url = 'http://localhost:8082/farmacia/all'; // Ruta por defecto
+                if (filter === 'sustancias') {
+                    url = 'http://localhost:8082/farmacia/farmacias-con-sustancias'; // Cambia a la ruta para sustancias
+                }
+
+                const response = await fetch(url);
+                const data = await response.json();
+
+                // Si hay un error en la respuesta, manejamos el error
+                if (response.status !== 200) {
+                    console.error('Error en la respuesta:', data.error);
+                    return;
+                }
+
                 const farmaciasConCoordenadas = data.map(farmacia => ({
                     ...farmacia,
                     latitud: parseFloat(farmacia.latitud.replace(',', '.')),
                     longitud: parseFloat(farmacia.longitud.replace(',', '.'))
                 }));
+
                 setFarmacias(farmaciasConCoordenadas);
-            })
-            .catch(error => console.error('Error:', error));
-    }, []);
+            } catch (error) {
+                console.error('Error al obtener farmacias:', error);
+            }
+        };
+
+        fetchFarmacias();
+    }, [filter]); // Ejecuta la función cada vez que el filtro cambia
 
     return (
         <MapContainer center={[-17.3895, -66.1568]} zoom={13} style={{ height: '500px', width: '100%' }}>

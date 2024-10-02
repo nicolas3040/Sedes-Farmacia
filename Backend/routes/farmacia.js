@@ -5,6 +5,7 @@ const db = require('../database');
 // Ruta base para verificar el servidor
 router.get('/', (req, res) => {
   res.status(200).json('Server on port 8082 and database is connected');
+  res.status(200).json('Server on port 8082 and database is connected');
 });
 
 // Obtener todas las farmacias activas
@@ -112,6 +113,7 @@ router.put('/:id', (req, res) => {
       }
       res.json({ Status: 'Farmacia updated' });
     }
+  
   );
 });
 
@@ -212,6 +214,29 @@ router.get('/por-zona', (req, res) => {
 
     if (rows.length === 0) {
       return res.status(404).json({ error: `No se encontraron farmacias activas en la zona con código ${zona}` });
+    }
+
+    res.json(rows);
+  });
+});
+
+// Obtener horas de entrada y salida para una farmacia específica
+router.get('/:id/horas', (req, res) => {
+  const { id } = req.params;
+
+  db.query(`
+    SELECT h.id, h.nombre, h.hora_entrada, h.hora_salida
+    FROM Horas h
+    INNER JOIN Farmacia_Horas fh ON h.id = fh.hora_id
+    WHERE fh.farmacia_id = ? AND h.status = 1;
+  `, [id], (error, rows) => {
+    if (error) {
+      console.error('Error al obtener las horas:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'No se encontraron horas para esta farmacia' });
     }
 
     res.json(rows);
