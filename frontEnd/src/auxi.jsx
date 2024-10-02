@@ -96,7 +96,39 @@ function Home() {
     );
 
 
+// Generar turnos para todas las farmacias de una zona específica
+router.get('/generar-turnos', (req, res) => {
+  const { zona } = req.query;
 
+  // Obtener todas las farmacias activas de la zona seleccionada
+  db.query('SELECT * FROM Farmacia WHERE codigo_id = ? AND status = 1;', [zona], (error, farmacias) => {
+    if (error) {
+      console.error('Error fetching farmacias:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    if (farmacias.length === 0) {
+      return res.status(404).json({ error: 'No se encontraron farmacias en esta zona' });
+    }
+
+    const turnos = [];
+    const daysInMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate(); // Días del mes actual
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const randomIndex = Math.floor(Math.random() * farmacias.length);
+      const farmacia = farmacias[randomIndex];
+
+      turnos.push({
+        nombre: farmacia.nombre,
+        codigoZona: zona,
+        fechaTurno: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${day}`,
+        turno: true,
+      });
+    }
+
+    res.json(turnos); // Enviar los turnos generados al frontend
+  });
+});
 
     
   }

@@ -1,12 +1,7 @@
-  import { StrictMode } from 'react'
-  import { createRoot } from 'react-dom/client'
-  import App from './App.jsx'
-  import Navegacion  from './Filtro.jsx'
-  import './index.css'
+import { createRoot } from 'react-dom/client';
+import App from './App.jsx'; // Asegúrate de que este sea el componente principal
+import './index.css';
 
-  createRoot(document.getElementById('root')).render(
-    <StrictMode>
-      <Navegacion /> {/* Usa Navegacion aquí */}
-    </StrictMode>,
-  );
-  
+createRoot(document.getElementById('root')).render(
+  <App /> // Renderiza el componente App aquí directamente
+);

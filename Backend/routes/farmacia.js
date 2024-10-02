@@ -153,4 +153,69 @@ router.get('/:id/horas', (req, res) => {
   });
 });
 
+// Obtener farmacias con el nombre del dueño
+router.get('/farmacias-con-duenos', (req, res) => {
+  db.query(`
+    SELECT 
+        f.id AS farmacia_id,
+        f.nombre AS farmacia_nombre,
+        d.nombre AS dueno_nombre,
+        d.primer_apellido AS dueno_primer_apellido,
+        d.segundo_apellido AS dueno_segundo_apellido
+    FROM 
+        Farmacia f
+    JOIN 
+        Dueno d ON f.dueno_id = d.id
+    WHERE 
+        f.status = 1 AND d.status = 1;
+  `, (error, rows) => {
+    if (error) {
+      console.error('Error fetching farmacias with owners:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    
+    res.json(rows);
+  });
+});
+
+
+
+// Archivo: farmacia.js (o similar en el backend)
+router.get('/por-zona', (req, res) => {
+  const { zona } = req.query;
+  
+  if (!zona) {
+    return res.status(400).json({ error: 'Se requiere el parámetro zona' });
+  }
+
+  // Consulta para obtener farmacias activas con el nombre de la zona (código)
+  db.query(`
+    SELECT 
+      f.id AS farmacia_id,
+      f.nombre AS farmacia_nombre,
+      f.direccion,
+      f.latitud,
+      f.longitud,
+      c.id AS codigo_id,
+      c.nombre AS codigo_nombre
+    FROM 
+      Farmacia f
+    JOIN 
+      Codigo c ON f.codigo_id = c.id
+    WHERE 
+      f.codigo_id = ? AND f.status = 1;
+  `, [zona], (error, rows) => {
+    if (error) {
+      console.error('Error al obtener farmacias:', error);
+      return res.status(500).json({ error: 'Error interno del servidor' });
+    }
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: `No se encontraron farmacias activas en la zona con código ${zona}` });
+    }
+
+    res.json(rows);
+  });
+});
+
 module.exports = router;
