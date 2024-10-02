@@ -231,3 +231,6 @@ dist
 
 # Ignore server.js file
 server.js
+
+# Ignore server.js file
+server.js
