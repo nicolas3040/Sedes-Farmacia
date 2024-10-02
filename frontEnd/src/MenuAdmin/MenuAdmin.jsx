@@ -1,15 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MenuAdmin.css'; // Importa el archivo CSS
 
 export default function MenuAdmin() {
   const navigate = useNavigate(); // Inicializa useNavigate
+  const [showConfirm, setShowConfirm] = useState(false); // Estado para mostrar la confirmación de eliminación
+  const [deleted, setDeleted] = useState(false); // Estado para saber si se eliminó la farmacia
+  const [error, setError] = useState(null); // Estado para manejar errores
 
   const handleMenu = () => {
-    navigate('/Login'); // Redirige a la ruta de MenuAdmin
+    navigate('/Login'); // Redirige a la ruta de Login
   };
   const handleRegistro = () => {
     navigate('/registro-farmacia'); // Redirige a la ruta de registro
+  };
+  const handleEditar = () => {
+    navigate('/editar-farmacia'); // Redirige a la ruta de editar farmacia
+  };
+
+  // Función para mostrar la confirmación de eliminación
+  const handleDeleteConfirmation = () => {
+    setShowConfirm(true);
+  };
+
+  // Función para realizar la eliminación lógica de la farmacia
+  const handleDeleteFarmacia = async () => {
+    const farmaciaId = 50; // ID estático de la farmacia
+
+    try {
+      const response = await fetch(`http://localhost:8082/farmacia/farmacia/eliminar/${farmaciaId}`, {
+        method: 'PUT',
+      });
+
+      if (response.ok) {
+        setDeleted(true);
+        setShowConfirm(false); // Ocultar confirmación después de eliminar
+      } else {
+        throw new Error('Error al eliminar la farmacia');
+      }
+    } catch (error) {
+      console.error('Error al eliminar farmacia:', error);
+      setError('Ocurrió un error al eliminar la farmacia.');
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowConfirm(false);
   };
 
   const farmacias = [
@@ -27,13 +63,30 @@ export default function MenuAdmin() {
       <div className="userName2">Ejemplo Nombre</div>
 
       <div className="buttonContainer2">
-        <button className="button2">
-          <span className="buttonText2">Cambiar Horario</span>
+        <button className="button2" onClick={handleDeleteConfirmation}>
+          <span className="buttonText2">Eliminar Farmacia</span>
         </button>
-        <button className="button2">
+        <button className="button2" onClick={handleEditar}>
           <span className="buttonText2">Editar Datos</span>
         </button>
       </div>
+
+      {/* Confirmación de eliminación lógica */}
+      {showConfirm && (
+        <div className="confirmationBox">
+          <p>¿Estás seguro de que deseas eliminar esta farmacia?</p>
+          <button className="confirmButton" onClick={handleDeleteFarmacia}>
+            Sí
+          </button>
+          <button className="cancelButton" onClick={handleCancelDelete}>
+            No
+          </button>
+        </div>
+      )}
+
+      {/* Mostrar mensaje de éxito o error */}
+      {deleted && <p className="successMessage">Farmacia eliminada correctamente.</p>}
+      {error && <p className="errorMessage">{error}</p>}
 
       <div className="listContainer2">
         {/* Encabezado */}
