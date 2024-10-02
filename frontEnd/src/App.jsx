@@ -1,14 +1,12 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'; // Importar useState y useEffect
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './Home/Home'; 
 import './App.css';
 
-
-
 function App() {
-  const [farmacias, setFarmacias] = useState([]);
-  const [horas, setHoras] = useState([]);
-  const [selectedFarmacia, setSelectedFarmacia] = useState(null);
+  const [farmacias, setFarmacias] = useState([]);  // useState hook
+  const [horas, setHoras] = useState([]);          // useState hook
+  const [selectedFarmacia, setSelectedFarmacia] = useState(null); // useState hook
 
   // Efecto para cargar farmacias al iniciar
   useEffect(() => {
@@ -24,10 +22,10 @@ function App() {
   // Función para obtener horas de entrada y salida para una farmacia específica
   const fetchHoras = (id) => {
     console.log('Fetching horas for farmacia ID:', id);
-    fetch(`http://localhost:8082/farmacia/${id}/horas`) // Usando backticks correctamente
+    fetch(`http://localhost:8082/farmacia/${id}/horas`)
       .then((response) => {
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`); // Usando backticks en el mensaje de error
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
         return response.json();
       })
@@ -45,8 +43,6 @@ function App() {
 
   return (
     <Router>
-     
-
       <Routes>
         <Route path="/" element={<Home />} />
         {/* Aquí puedes añadir más rutas para otras vistas si lo necesitas */}
