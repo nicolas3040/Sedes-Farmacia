@@ -4,14 +4,15 @@ import './Turno.css';
 const Turno = () => {
   const [farmacias, setFarmacias] = useState([]);
   const [filtroZona, setFiltroZona] = useState('');
-  const [zonas, setZonas] = useState([]); // Estado para las zonas
+  const [zonas, setZonas] = useState([]);
+  const [turnos, setTurnos] = useState([]); // Para guardar los turnos generados
 
   // Obtener los códigos de zona desde el backend
   useEffect(() => {
-    fetch('http://localhost:8082/codigo/all') // Cambia la URL si es necesario
+    fetch('http://localhost:8082/codigo/all')
       .then((response) => response.json())
       .then((data) => {
-        setZonas(data); // Guardar las zonas en el estado
+        setZonas(data);
       })
       .catch((error) => {
         console.error('Error fetching zonas:', error);
@@ -19,18 +20,17 @@ const Turno = () => {
   }, []);
 
   const handleFiltroChange = (e) => {
-    setFiltroZona(e.target.value); // Cambiar el valor del filtro
+    setFiltroZona(e.target.value);
   };
 
-  // Función para generar los turnos
+  // Función para generar turnos aleatorios
   const handleGenerarTurnos = () => {
     if (!filtroZona) {
       alert('Por favor selecciona una zona');
       return;
     }
 
-    // Hacer la solicitud al backend para obtener las farmacias por zona
-    fetch(`http://localhost:8082/farmacia/por-zona?zona=${filtroZona}`)
+    fetch(`http://localhost:8082/codigo/codigofiltro/${filtroZona}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -38,22 +38,38 @@ const Turno = () => {
         return response.json();
       })
       .then((data) => {
-        if (data.error) {
-          alert(data.error);
-        } else {
-          setFarmacias(data); // Actualiza el estado con las farmacias obtenidas
+        console.log('Datos recibidos (JSON):', data);
+        const farmaciasConTurno = data.map((farmacia) => ({
+          ...farmacia,
+          turno: true, // Ahora el turno se asigna inicialmente como "true" (checkbox marcado)
+          fecha_turno: null, // Añadimos una fecha de turno inicializada en null
+        }));
+
+        const totalDiasMes = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
+        const turnosGenerados = [];
+
+        // Generamos los turnos aleatorios para cada día del mes
+        for (let dia = 1; dia <= totalDiasMes; dia++) {
+          const randomIndex = Math.floor(Math.random() * farmaciasConTurno.length);
+          const farmaciaSeleccionada = farmaciasConTurno[randomIndex];
+          turnosGenerados.push({
+            ...farmaciaSeleccionada,
+            fecha_turno: new Date(new Date().getFullYear(), new Date().getMonth(), dia).toISOString().split('T')[0],
+          });
         }
+
+        setTurnos(turnosGenerados);
       })
       .catch((error) => {
         console.error('Error fetching farmacias:', error);
+        setTurnos([]); // En caso de error, inicializa como array vacío
       });
   };
 
   const handleToggleTurno = (index) => {
-    // Lógica para manejar cambios en los turnos (checkbox)
-    const updatedFarmacias = [...farmacias];
-    updatedFarmacias[index].turno = !updatedFarmacias[index].turno;
-    setFarmacias(updatedFarmacias);
+    const updatedTurnos = [...turnos];
+    updatedTurnos[index].turno = !updatedTurnos[index].turno; // Cambia el estado de "turno" al desmarcar el checkbox
+    setTurnos(updatedTurnos);
   };
 
   return (
@@ -80,24 +96,30 @@ const Turno = () => {
             <th>Nombre</th>
             <th>Codigo Zona</th>
             <th>Dirección</th>
+            <th>Fecha Turno</th>
             <th>Turno</th>
           </tr>
         </thead>
         <tbody>
-          {farmacias.map((farmacia, index) => (
-            <tr key={index}>
-              <td>{farmacia.farmacia_nombre}</td>
-              <td>{farmacia.codigo_nombre}</td>
-              <td>{farmacia.direccion}</td>
-              <td>
-                <input
-                  type="checkbox"
-                  checked={farmacia.turno || false}
-                  onChange={() => handleToggleTurno(index)}
-                />
-              </td>
-            </tr>
-          ))}
+          {turnos.length > 0 ? (
+            turnos.map((turno, index) => (
+              <tr key={index}>
+                <td>{turno.farmacia_nombre}</td>
+                <td>{turno.codigo}</td>
+                <td>{turno.direccion}</td>
+                <td>{turno.fecha_turno}</td>
+                <td>
+                  <input
+                    type="checkbox"
+                    checked={turno.turno} // Checkbox marcado por defecto
+                    onChange={() => handleToggleTurno(index)} // Permite desmarcar
+                  />
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr><td colSpan="5">No se generaron turnos</td></tr>
+          )}
         </tbody>
       </table>
 

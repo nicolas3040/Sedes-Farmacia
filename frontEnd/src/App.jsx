@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'; // Importar useState y useEffect
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './Home/Home'; 
+import Turno from './Turno/Turno'; 
+
 import './App.css';
 
 function App() {
@@ -45,6 +47,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/Turno" element={<Turno />} />
+
         {/* Aquí puedes añadir más rutas para otras vistas si lo necesitas */}
       </Routes>
     </Router>
