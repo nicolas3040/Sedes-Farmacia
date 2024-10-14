@@ -228,5 +228,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
 # Ignore server.js file
 server.js

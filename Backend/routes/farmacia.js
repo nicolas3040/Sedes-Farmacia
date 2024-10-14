@@ -400,6 +400,35 @@ router.get('/farmacias-con-sustancias', (req, res) => {
   });
 });
 
+// Buscar farmacias por nombre o letras iniciales
+router.get('/buscar-farmacias', (req, res) => {
+  const { nombre } = req.query;
+
+  if (!nombre) {
+    return res.status(400).json({ error: 'Debe proporcionar un nombre o parte del nombre para buscar farmacias' });
+  }
+
+  const searchQuery = `%${nombre}%`; // Esto permitirá buscar por letras iniciales o cualquier parte del nombre
+
+  db.query(`
+    SELECT id, nombre, latitud, longitud
+    FROM farmacia
+    WHERE nombre LIKE ? AND status = 1;
+  `, [searchQuery], (error, rows) => {
+    if (error) {
+      console.error('Error fetching farmacias:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'No se encontraron farmacias con ese nombre' });
+    }
+
+    res.json(rows);
+  });
+});
+
+
 // Ruta para obtener horas de entrada y salida para una farmacia específica
 router.get('/:id/horas', (req, res) => {
   const { id } = req.params;
