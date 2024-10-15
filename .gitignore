@@ -329,8 +329,11 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+<<<<<<< HEAD
 # Ignore server.js file
 server.js
 
+=======
+>>>>>>> origin/Victor
 # Ignore server.js file
 server.js
