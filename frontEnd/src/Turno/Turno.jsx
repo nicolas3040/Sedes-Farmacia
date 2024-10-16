@@ -7,6 +7,10 @@ const Turno = () => {
   const [zonas, setZonas] = useState([]);
   const [turnos, setTurnos] = useState([]); // Para guardar los turnos generados
 
+  const handleMenu = () => {
+    navigate('/MenuAdmin'); // Redirige a la ruta de Login
+  };
+
   // Obtener los códigos de zona desde el backend
   useEffect(() => {
     fetch('http://localhost:8082/codigo/all')
@@ -38,11 +42,12 @@ const Turno = () => {
         return response.json();
       })
       .then((data) => {
-        console.log('Datos recibidos (JSON):', data);
         const farmaciasConTurno = data.map((farmacia) => ({
           ...farmacia,
           turno: true, // Ahora el turno se asigna inicialmente como "true" (checkbox marcado)
           fecha_turno: null, // Añadimos una fecha de turno inicializada en null
+          hora_entrada: '00:00:00', // El turno empieza a medianoche
+          hora_salida: '23:59:59', // El turno termina justo antes de la medianoche siguiente
         }));
 
         const totalDiasMes = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
@@ -59,6 +64,29 @@ const Turno = () => {
         }
 
         setTurnos(turnosGenerados);
+
+        // Ahora enviamos los turnos generados al backend para guardarlos
+        fetch('http://localhost:8082/horas/guardarTurnos', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(turnosGenerados),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then((result) => {
+            console.log('Turnos guardados:', result);
+            alert('Turnos guardados exitosamente');
+          })
+          .catch((error) => {
+            console.error('Error guardando turnos:', error);
+            alert('Error al guardar turnos, verifica la conexión o la ruta');
+          });
       })
       .catch((error) => {
         console.error('Error fetching farmacias:', error);
@@ -74,7 +102,7 @@ const Turno = () => {
 
   return (
     <div className="turno-container">
-      <h1>Gestion Turnos</h1>
+      <h1>Gestión Turnos</h1>
       <div className="usuario">Usuario: <span>Ejemplo Nombre</span></div>
 
       <button className="generar-turnos-btn" onClick={handleGenerarTurnos}>Generar Turnos</button>
@@ -94,7 +122,7 @@ const Turno = () => {
         <thead>
           <tr>
             <th>Nombre</th>
-            <th>Codigo Zona</th>
+            <th>Código Zona</th>
             <th>Dirección</th>
             <th>Fecha Turno</th>
             <th>Turno</th>
@@ -123,7 +151,9 @@ const Turno = () => {
         </tbody>
       </table>
 
-      <button className="volver-btn">Volver</button>
+      <button className="volver-btn" onClick={handleMenu}>
+        <span className="homeButtonText">Volver</span>
+      </button>
     </div>
   );
 };

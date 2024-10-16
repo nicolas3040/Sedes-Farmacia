@@ -31,8 +31,9 @@ const MapView = ({ filter, searchTerm, onSelectFarmacia }) => {
 
                 const farmaciasConCoordenadas = data.map(farmacia => ({
                     ...farmacia,
-                    latitud: parseFloat(farmacia.latitud.replace(',', '.')),
-                    longitud: parseFloat(farmacia.longitud.replace(',', '.'))
+                    // Verificar que latitud y longitud existan y no sean nulos antes de hacer replace
+                    latitud: farmacia.latitud ? parseFloat(farmacia.latitud.replace(',', '.')) : 0,
+                    longitud: farmacia.longitud ? parseFloat(farmacia.longitud.replace(',', '.')) : 0
                 }));
 
                 setFarmacias(farmaciasConCoordenadas);
@@ -58,7 +59,7 @@ const MapView = ({ filter, searchTerm, onSelectFarmacia }) => {
             const farmacia = await response.json();
 
             // Pasa el id de la farmacia seleccionada a la función proporcionada
-            onSelectFarmacia(farmacia.id); // Cambiado para pasar solo el id
+            onSelectFarmacia(farmacia.id);
 
         } catch (error) {
             console.error('Error al cargar los detalles de la farmacia:', error);

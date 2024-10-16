@@ -187,12 +187,12 @@ router.post('/nuevafarmacia', (req, res) => {
 // Ruta para obtener los detalles de una farmacia por ID
 router.get('/cargarfarmacia/:id', (req, res) => {
   const { id } = req.params;
-  const query = 'SELECT * FROM Farmacia WHERE id = ?';
+  const query = 'SELECT * FROM Farmacia WHERE id = ? AND status = 1';
 
   db.query(query, [id], (error, results) => {
     if (error) {
       console.error('Error al obtener los datos de la farmacia:', error);
-      return res.status(500).json({ error: 'Error al obtener los datos de la farmacia' });
+      return res.status(500).json({ error: 'Error interno del servidor' });
     }
 
     if (results.length === 0) {
@@ -202,6 +202,7 @@ router.get('/cargarfarmacia/:id', (req, res) => {
     res.status(200).json(results[0]);
   });
 });
+
 //detalles dueno
 // Ruta para obtener los datos del dueño por ID
 router.get('/duenofarmacia/:id', (req, res) => {

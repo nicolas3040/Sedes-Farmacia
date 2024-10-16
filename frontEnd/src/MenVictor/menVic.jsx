@@ -12,18 +12,10 @@ export default function MenuAdmin() {
     navigate('/Login'); // Redirige a la ruta de Login
   };
   const handleRegistro = () => {
-    navigate('/RegistroFarmacia'); // Redirige a la ruta de registro
-  };
-
-  const handleUsuario = () => {
-    navigate('/RegistroUsuario'); // Redirige a la ruta de registro
-  };
-
-  const handleTurno = () => {
-    navigate('/Turno'); // Redirige a la ruta de registro
+    navigate('/registro-farmacia'); // Redirige a la ruta de registro
   };
   const handleEditar = () => {
-    navigate('/EditarFarmacia'); // Redirige a la ruta de editar farmacia
+    navigate('/editar-farmacia'); // Redirige a la ruta de editar farmacia
   };
 
   // Función para mostrar la confirmación de eliminación
@@ -118,20 +110,12 @@ export default function MenuAdmin() {
         <span className="buttonText2">Encargados</span>
       </button>
 
-      <button className="bottomButton2"  onClick={handleTurno}>
-        <span className="buttonText2">Turnos</span>
-      </button>
-
       <button className="bottomButton2" onClick={handleRegistro}>
         <span className="buttonText2">Registrar Nueva Farmacia</span>
       </button>
 
       <button className="homeButton" onClick={handleMenu}>
         <span className="homeButtonText">Cerrar Sesión</span>
-      </button>
-
-      <button className="bottomButton2"  onClick={handleUsuario}>
-        <span className="buttonText2">Crear Usuarios</span>
       </button>
     </div>
   );

@@ -15,7 +15,7 @@ function Home() {
   // Estado para almacenar los detalles de la farmacia
   const [farmacia, setFarmacia] = useState(null);
   const [fileBase64, setFileBase64] = useState('');
-  const [selectedFarmaciaId, setSelectedFarmaciaId] = useState(56); // ID por defecto
+  const [selectedFarmaciaId, setSelectedFarmaciaId] = useState(20); // ID por defecto
 
   const handleHome = () => {
     navigate('/login');
@@ -29,28 +29,20 @@ function Home() {
   // Efecto para cargar los detalles de la farmacia seleccionada
 useEffect(() => {
   const fetchFarmacia = async () => {
-      try {
-          const response = await fetch(`http://localhost:8082/farmacia/cargarfarmacia/${selectedFarmaciaId}`);
-          if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          const data = await response.json();
-          setFarmacia(data);
+    try {
+        const response = await fetch(`http://localhost:8082/farmacia/cargarfarmacia/${selectedFarmaciaId}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setFarmacia(data);
+    } catch (error) {
+        console.error('Error al cargar los detalles de la farmacia:', error);
+        alert('Error al cargar la farmacia. Verifica si la farmacia existe.');
+    }
+ };
+ 
 
-          // Convertir imagen desde binario a base64
-          if (data.imagen) {
-              const base64String = btoa(
-                  new Uint8Array(data.imagen.data).reduce((data, byte) => data + String.fromCharCode(byte), '')
-              );
-              setFileBase64(`data:image/jpeg;base64,${base64String}`);
-          } else {
-              // Si no hay imagen, limpiar fileBase64
-              setFileBase64('');
-          }
-      } catch (error) {
-          console.error('Error al cargar los detalles de la farmacia:', error);
-      }
-  };
 
   fetchFarmacia();
 }, [selectedFarmaciaId]); // Se ejecuta cuando selectedFarmaciaId cambia

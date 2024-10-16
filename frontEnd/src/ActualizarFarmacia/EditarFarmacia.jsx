@@ -194,7 +194,7 @@ const EditarFarmacia = () => {
 
       if (response.ok) {
         alert('Farmacia actualizada exitosamente');
-        navigate('/menu-admin');
+        navigate('/MenuAdmin');
       } else {
         alert('Error al actualizar la farmacia');
       }
@@ -421,7 +421,7 @@ const EditarFarmacia = () => {
       </div>
 
       <div className="buttonContainer1">
-        <button className="homeButton" onClick={() => navigate('/menu-admin')}>
+        <button className="homeButton" onClick={() => navigate('/MenuAdmin')}>
           <span className="homeButtonText">Cancelar</span>
         </button>
         <button className="loginButton" onClick={handleSubmit}>

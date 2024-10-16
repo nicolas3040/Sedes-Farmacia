@@ -30,15 +30,17 @@ router.get('/:id', (req, res) => {
 
 // Crear una nueva hora
 router.post('/', (req, res) => {
-    const { nombre, hora_entrada, hora_salida } = req.body;
+    const { nombre, hora_entrada, hora_salida, dia_turno, turno } = req.body;
 
     // Validación de entrada
-    if (!nombre || !hora_entrada || !hora_salida) {
-        return res.status(400).json({ error: 'Nombre, hora_entrada y hora_salida son requeridos' });
+    if (!nombre || !hora_entrada || !hora_salida || !dia_turno) {
+        return res.status(400).json({ error: 'Nombre, hora_entrada, hora_salida y dia_turno son requeridos' });
     }
 
-    MysqlConnection.query('INSERT INTO Horas (nombre, hora_entrada, hora_salida, status) VALUES (?, ?, ?, 1);',
-        [nombre, hora_entrada, hora_salida], (error, result) => {
+    MysqlConnection.query(
+        'INSERT INTO Horas (nombre, hora_entrada, hora_salida, dia_turno, turno, status) VALUES (?, ?, ?, ?, ?, 1);',
+        [nombre, hora_entrada, hora_salida, dia_turno, turno || 0],  // El campo turno puede ser opcional (0 por defecto)
+        (error, result) => {
             if (error) {
                 console.error('Error creating hour:', error);
                 return res.status(500).json({ error: 'Internal server error' });
@@ -49,16 +51,18 @@ router.post('/', (req, res) => {
 
 // Actualizar una hora por ID
 router.put('/:id', (req, res) => {
-    const { nombre, hora_entrada, hora_salida } = req.body;
+    const { nombre, hora_entrada, hora_salida, dia_turno, turno } = req.body;
     const { id } = req.params;
 
     // Validación de entrada
-    if (!nombre || !hora_entrada || !hora_salida) {
-        return res.status(400).json({ error: 'Nombre, hora_entrada y hora_salida son requeridos' });
+    if (!nombre || !hora_entrada || !hora_salida || !dia_turno) {
+        return res.status(400).json({ error: 'Nombre, hora_entrada, hora_salida y dia_turno son requeridos' });
     }
 
-    MysqlConnection.query('UPDATE Horas SET nombre = ?, hora_entrada = ?, hora_salida = ?, last_update = CURRENT_TIMESTAMP WHERE id = ? AND status = 1;',
-        [nombre, hora_entrada, hora_salida, id], (error, result) => {
+    MysqlConnection.query(
+        'UPDATE Horas SET nombre = ?, hora_entrada = ?, hora_salida = ?, dia_turno = ?, turno = ?, last_update = CURRENT_TIMESTAMP WHERE id = ? AND status = 1;',
+        [nombre, hora_entrada, hora_salida, dia_turno, turno || 0, id],  // El campo turno puede ser opcional
+        (error, result) => {
             if (error) {
                 console.error(`Error updating hour with ID ${id}:`, error);
                 return res.status(500).json({ error: 'Internal server error' });
@@ -82,6 +86,33 @@ router.delete('/:id', (req, res) => {
             return res.status(404).json({ error: 'Hora not found' });
         }
         res.json({ Status: 'Hora deleted' });
+    });
+});
+
+// Nueva ruta para guardar turnos generados
+router.post('/guardarTurnos', (req, res) => {
+    const turnos = req.body;
+
+    if (!turnos || !turnos.length) {
+        return res.status(400).json({ error: 'No se recibieron turnos para guardar' });
+    }
+
+    let query = 'INSERT INTO Horas (nombre, hora_entrada, hora_salida, status, dia_turno, turno) VALUES ?';
+    const values = turnos.map(turno => [
+        turno.farmacia_nombre,
+        turno.hora_entrada || '08:00:00', // hora de entrada predeterminada, ajusta según tu lógica
+        turno.hora_salida || '20:00:00', // hora de salida predeterminada, ajusta según tu lógica
+        1, // status activo por defecto
+        turno.fecha_turno, // fecha del turno generada
+        turno.turno ? 1 : 0 // 1 si tiene turno, 0 si no
+    ]);
+
+    MysqlConnection.query(query, [values], (error, result) => {
+        if (error) {
+            console.error('Error guardando los turnos:', error);
+            return res.status(500).json({ error: 'Error interno del servidor' });
+        }
+        res.json({ message: 'Turnos guardados exitosamente', insertedRows: result.affectedRows });
     });
 });
 

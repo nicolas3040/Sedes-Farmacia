@@ -8,7 +8,7 @@ const RegistroFarmacia = () => {
   const navigate = useNavigate(); // Inicializa useNavigate
 
   const handleMenu = () => {
-    navigate('/menu-admin'); // Redirige a la ruta de MenuAdmin
+    navigate('/MenuAdmin'); // Redirige a la ruta de MenuAdmin
   };
 
   // Estados para los datos de los pickers
